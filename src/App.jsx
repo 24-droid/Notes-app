@@ -9,7 +9,7 @@ function Navbar() {
     <header className="w-full bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <a href="/" className="text-xl font-bold text-indigo-600">
-          NotesApp
+          DSVICTORY
         </a>
         <nav>
           <ul className="flex space-x-6">
@@ -41,14 +41,11 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 flex flex-col">
       <Navbar />
-      {/* <main className="flex-grow w-full max-w-7xl mx-auto p-8">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/upload" element={<Upload />} />
         </Routes>
-      </main> */}
-      <Home />
     </div>
   )
 }
