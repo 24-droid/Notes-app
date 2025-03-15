@@ -37,7 +37,9 @@ if (!isProduction) {
 // Serve HTML
 app.use('*all', async (req, res) => {
   try {
-    const url = req.originalUrl.replace(base, '')
+    // Normalize the URL so it always starts with a '/'
+    const rawUrl = req.originalUrl.replace(base, '')
+    const url = rawUrl.startsWith('/') ? rawUrl : '/' + rawUrl
 
     /** @type {string} */
     let template
@@ -73,7 +75,6 @@ app.use('*all', async (req, res) => {
         })
 
         const [htmlStart, htmlEnd] = template.split(`<!--app-html-->`)
-
         res.write(htmlStart)
 
         transformStream.on('finish', () => {
