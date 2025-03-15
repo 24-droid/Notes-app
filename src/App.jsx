@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
-import Home from './components/Home'
+import Home from './Home'
 import Explore from './components/Explore'
 import Upload from './components/Upload'
 
@@ -35,30 +35,20 @@ function Navbar() {
   )
 }
 
-function Footer() {
-  return (
-    <footer className="w-full bg-gray-100 py-6 mt-12">
-      <div className="max-w-7xl mx-auto text-center">
-        <p className="text-gray-600 text-sm">
-          &copy; {new Date().getFullYear()} NotesApp. All rights reserved.
-        </p>
-      </div>
-    </footer>
-  )
-}
+
 
 function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 flex flex-col">
       <Navbar />
-      <main className="flex-grow w-full max-w-7xl mx-auto p-8">
+      {/* <main className="flex-grow w-full max-w-7xl mx-auto p-8">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/upload" element={<Upload />} />
         </Routes>
-      </main>
-      <Footer />
+      </main> */}
+      <Home />
     </div>
   )
 }
