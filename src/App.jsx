@@ -9,7 +9,7 @@ function Navbar() {
     <header className="w-full bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <a href="/" className="text-xl font-bold text-indigo-600">
-          MyApp
+          NotesApp
         </a>
         <nav>
           <ul className="flex space-x-6">
@@ -40,7 +40,7 @@ function Footer() {
     <footer className="w-full bg-gray-100 py-6 mt-12">
       <div className="max-w-7xl mx-auto text-center">
         <p className="text-gray-600 text-sm">
-          &copy; {new Date().getFullYear()} MyApp. All rights reserved.
+          &copy; {new Date().getFullYear()} NotesApp. All rights reserved.
         </p>
       </div>
     </footer>
