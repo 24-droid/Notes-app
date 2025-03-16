@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import Home from './Home'
 import Explore from './components/Explore'
 import Upload from './components/Upload'
+import Notes from './components/Notes'
 
 function Navbar() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/upload" element={<Upload />} />
+          <Route path="/notes" element={<Notes />} /> 
         </Routes>
     </div>
   )

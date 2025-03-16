@@ -14,22 +14,54 @@ const Upload = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Create object URLs and store file details.
-    const newNote = {
-      id: Date.now(),
-      chapter,
-      classCategory,
-      description,
-      notesFile: notesFile
-        ? { url: URL.createObjectURL(notesFile), name: notesFile.name, type: notesFile.type }
-        : null,
-      videoFile: videoFile
-        ? { url: URL.createObjectURL(videoFile), name: videoFile.name, type: videoFile.type }
-        : null,
-    };
+    // Convert files to Base64 for storage
+    const reader = new FileReader();
+    if (notesFile) {
+      reader.readAsDataURL(notesFile);
+      reader.onload = () => {
+        const notesFileData = reader.result;
 
-    addNote(newNote);
-    navigate('/explore');
+        const newNote = {
+          id: Date.now(),
+          chapter,
+          classCategory,
+          description,
+          notesFile: {
+            name: notesFile.name,
+            type: notesFile.type,
+            data: notesFileData, // Store file data as Base64
+          },
+          videoFile: videoFile
+            ? {
+                name: videoFile.name,
+                type: videoFile.type,
+                data: URL.createObjectURL(videoFile), // Temporary URL for videos
+              }
+            : null,
+        };
+
+        addNote(newNote);
+        navigate('/explore');
+      };
+    } else {
+      const newNote = {
+        id: Date.now(),
+        chapter,
+        classCategory,
+        description,
+        notesFile: null,
+        videoFile: videoFile
+          ? {
+              name: videoFile.name,
+              type: videoFile.type,
+              data: URL.createObjectURL(videoFile), // Temporary URL for videos
+            }
+          : null,
+      };
+
+      addNote(newNote);
+      navigate('/explore');
+    }
   };
 
   return (
