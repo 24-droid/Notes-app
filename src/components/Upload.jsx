@@ -2,65 +2,50 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNotes } from '../context/NotesContext';
 
+// Helper function to convert a file to Base64
+const fileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () =>
+      resolve({ name: file.name, type: file.type, data: reader.result });
+    reader.onerror = (error) => reject(error);
+  });
+};
+
 const Upload = () => {
   const { addNote } = useNotes();
   const navigate = useNavigate();
   const [chapter, setChapter] = useState('');
+  const [subject, setSubject] = useState('');
   const [classCategory, setClassCategory] = useState('');
   const [description, setDescription] = useState('');
-  const [notesFile, setNotesFile] = useState(null);
+  const [notesFiles, setNotesFiles] = useState([]);
   const [videoFile, setVideoFile] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Convert files to Base64 for storage
-    const reader = new FileReader();
-    if (notesFile) {
-      reader.readAsDataURL(notesFile);
-      reader.onload = () => {
-        const notesFileData = reader.result;
-
-        const newNote = {
-          id: Date.now(),
-          chapter,
-          classCategory,
-          description,
-          notesFile: {
-            name: notesFile.name,
-            type: notesFile.type,
-            data: notesFileData, // Store file data as Base64
-          },
-          videoFile: videoFile
-            ? {
-                name: videoFile.name,
-                type: videoFile.type,
-                data: URL.createObjectURL(videoFile), // Temporary URL for videos
-              }
-            : null,
-        };
-
-        addNote(newNote);
-        navigate('/explore');
-      };
-    } else {
+    try {
+      const notesData = notesFiles.length > 0 ? await Promise.all(notesFiles.map(fileToBase64)) : [];
       const newNote = {
         id: Date.now(),
         chapter,
+        subject,
         classCategory,
         description,
-        notesFile: null,
+        notesFiles: notesData,
         videoFile: videoFile
           ? {
               name: videoFile.name,
               type: videoFile.type,
-              data: URL.createObjectURL(videoFile), // Temporary URL for videos
+              data: URL.createObjectURL(videoFile), // Temporary URL for video preview/download
             }
           : null,
       };
-
       addNote(newNote);
       navigate('/explore');
+    } catch (error) {
+      console.error('Error processing files:', error);
     }
   };
 
@@ -72,7 +57,7 @@ const Upload = () => {
             Upload Notes & Videos
           </h2>
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Chapter */}
+            {/* Chapter Field */}
             <div>
               <label htmlFor="chapter" className="block mb-3 font-semibold text-gray-700">
                 Chapter
@@ -88,7 +73,23 @@ const Upload = () => {
               />
             </div>
 
-            {/* Class/Category */}
+            {/* Subject Field */}
+            <div>
+              <label htmlFor="subject" className="block mb-3 font-semibold text-gray-700">
+                Subject
+              </label>
+              <input
+                type="text"
+                id="subject"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="Enter subject name"
+                className="w-full border border-gray-300 p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                required
+              />
+            </div>
+
+            {/* Class/Category Field */}
             <div>
               <label htmlFor="classCategory" className="block mb-3 font-semibold text-gray-700">
                 Class / Category
@@ -108,7 +109,7 @@ const Upload = () => {
               </select>
             </div>
 
-            {/* Description */}
+            {/* Description Field */}
             <div>
               <label htmlFor="description" className="block mb-3 font-semibold text-gray-700">
                 Description
@@ -124,26 +125,27 @@ const Upload = () => {
               ></textarea>
             </div>
 
-            {/* Notes File Upload */}
+            {/* Notes Files Upload Field */} 
             <div>
-              <label className="block mb-3 font-semibold text-gray-700">Notes File</label>
+              <label className="block mb-3 font-semibold text-gray-700">Notes Files</label>
               <div className="flex items-center">
                 <label className="cursor-pointer bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg">
-                  Choose File
+                  Choose Files
                   <input
                     type="file"
                     accept=".pdf,.doc,.docx"
-                    onChange={(e) => setNotesFile(e.target.files[0])}
+                    multiple
+                    onChange={(e) => setNotesFiles([...e.target.files])}
                     className="hidden"
                   />
                 </label>
                 <span className="ml-4 text-gray-700">
-                  {notesFile ? notesFile.name : 'No file chosen'}
+                  {notesFiles.length > 0 ? `${notesFiles.length} files selected` : 'No files chosen'}
                 </span>
               </div>
             </div>
 
-            {/* Video File Upload */}
+            {/* Video File Upload Field */} 
             <div>
               <label className="block mb-3 font-semibold text-gray-700">Video File</label>
               <div className="flex items-center">
@@ -162,7 +164,7 @@ const Upload = () => {
               </div>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit Button */} 
             <button
               type="submit"
               className="w-full bg-indigo-600 text-white py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg"

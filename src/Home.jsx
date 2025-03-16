@@ -258,7 +258,7 @@ function Home() {
       </section>
 
       {/* Call-to-Action Section */}
-      <section className="bg-gradient-to-br from-blue-600 to-purple-600 py-16 mb-10">
+      <section className="bg-gradient-to-br from-blue-600 to-purple-600 py-16">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">Join DSVICTORY Today!</h2>
           <p className="text-xl text-gray-200 mb-8">
@@ -273,17 +273,6 @@ function Home() {
         </div>
       </section>
 
-      {/* Footer Section */}
-      <footer className="bg-gray-900 py-8">
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-gray-300">
-            © {new Date().getFullYear()} DSVICTORY. All rights reserved.
-          </p>
-          <p className="text-gray-400 mt-2">
-            Founded by <span className="font-semibold">Dharam Singh Chauhan</span>
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }
