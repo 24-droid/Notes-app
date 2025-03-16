@@ -66,7 +66,7 @@ const Upload = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-6">
-      <div className="max-w-2xl w-full bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105">
+      <div className="max-w-2xl w-full bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300">
         <div className="p-8">
           <h2 className="text-4xl font-bold mb-8 text-center text-gray-900">
             Upload Notes & Videos

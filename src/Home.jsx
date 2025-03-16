@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import StudentLearningAnimation from './assets/Student-Learning.json'; // Import the JSON file
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faVideo, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faVideo, faLock, faCheckCircle, faUsers, faChartLine, faTrophy } from '@fortawesome/free-solid-svg-icons';
 
 function Home() {
   const [Lottie, setLottie] = useState(null);
@@ -137,27 +137,139 @@ function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="bg-gray-50 py-16">
+      {/* Success Stories Section */}
+      <section className="bg-gray-50 py-16 blocks">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-12">What Our Students Say</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Testimonial 1 */}
-            <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <p className="text-gray-600 italic mb-6">
-                "The notes and videos helped me score top grades in my exams. Highly recommended!"
+          <h2 className="text-4xl font-bold text-gray-900 mb-12">Success Stories</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Story 1 */}
+            <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <FontAwesomeIcon
+                icon={faTrophy}
+                className="w-16 h-16 mx-auto mb-6 text-yellow-500"
+              />
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">John Doe</h3>
+              <p className="text-gray-600">
+                "DSVICTORY helped me score top grades in my exams. Highly recommended!"
               </p>
-              <h4 className="text-xl font-bold text-gray-900">- Harshad Gupta</h4>
             </div>
 
-            {/* Testimonial 2 */}
-            <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <p className="text-gray-600 italic mb-6">
-                "The platform is user-friendly, and the content is top-notch. A game-changer for students!"
+            {/* Story 2 */}
+            <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <FontAwesomeIcon
+                icon={faChartLine}
+                className="w-16 h-16 mx-auto mb-6 text-green-500"
+              />
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Jane Smith</h3>
+              <p className="text-gray-600">
+                "The platform is user-friendly, and the content is top-notch. A game-changer!"
               </p>
-              <h4 className="text-xl font-bold text-gray-900">- Rohan Sharma</h4>
+            </div>
+
+            {/* Story 3 */}
+            <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <FontAwesomeIcon
+                icon={faUsers}
+                className="w-16 h-16 mx-auto mb-6 text-blue-500"
+              />
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Alex Johnson</h3>
+              <p className="text-gray-600">
+                "I improved my grades significantly with DSVICTORY's resources."
+              </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="bg-white py-16">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold text-gray-900 mb-12">Pricing Plans</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Basic Plan */}
+            <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Basic</h3>
+              <p className="text-gray-600 mb-6">Perfect for beginners</p>
+              <p className="text-4xl font-bold text-blue-600 mb-6">$9.99/month</p>
+              <ul className="text-gray-600 mb-6">
+                <li className="mb-2">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 mr-2" />
+                  Access to Notes
+                </li>
+                <li className="mb-2">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 mr-2" />
+                  Limited Videos
+                </li>
+              </ul>
+              <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                Get Started
+              </button>
+            </div>
+
+            {/* Pro Plan */}
+            <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Pro</h3>
+              <p className="text-gray-600 mb-6">For serious learners</p>
+              <p className="text-4xl font-bold text-purple-600 mb-6">$19.99/month</p>
+              <ul className="text-gray-600 mb-6">
+                <li className="mb-2">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 mr-2" />
+                  Access to All Notes
+                </li>
+                <li className="mb-2">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 mr-2" />
+                  Unlimited Videos
+                </li>
+                <li className="mb-2">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 mr-2" />
+                  Priority Support
+                </li>
+              </ul>
+              <button className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                Get Started
+              </button>
+            </div>
+
+            {/* Premium Plan */}
+            <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Premium</h3>
+              <p className="text-gray-600 mb-6">For top performers</p>
+              <p className="text-4xl font-bold text-green-600 mb-6">$29.99/month</p>
+              <ul className="text-gray-600 mb-6">
+                <li className="mb-2">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 mr-2" />
+                  Access to All Notes
+                </li>
+                <li className="mb-2">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 mr-2" />
+                  Unlimited Videos
+                </li>
+                <li className="mb-2">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 mr-2" />
+                  One-on-One Mentorship
+                </li>
+              </ul>
+              <button className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors">
+                Get Started
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Call-to-Action Section */}
+      <section className="bg-gradient-to-br from-blue-600 to-purple-600 py-16 mb-10">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold text-white mb-6">Join DSVICTORY Today!</h2>
+          <p className="text-xl text-gray-200 mb-8">
+            Start your journey towards academic excellence with our comprehensive resources.
+          </p>
+          <Link
+            to="/upload"
+            className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300"
+          >
+            Get Started
+          </Link>
         </div>
       </section>
 
