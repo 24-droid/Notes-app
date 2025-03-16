@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNotes } from '../context/NotesContext';
 
 const Explore = () => {
   const { notes } = useNotes();
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [searchChapter, setSearchChapter] = useState('');
+  const [videoUrls, setVideoUrls] = useState({});
 
-  // Group notes by class/category
+  // Create video URLs from videoFile.data if available.
+  useEffect(() => {
+    const newVideoUrls = { ...videoUrls };
+    notes.forEach(note => {
+      if (note.videoFile && note.videoFile.data && !newVideoUrls[note.id]) {
+        newVideoUrls[note.id] = note.videoFile.data;
+      }
+    });
+    setVideoUrls(newVideoUrls);
+    // NOTE: We are not revoking URLs here to keep them persistent during the session.
+  }, [notes]);
+
+  // Group notes by class category.
   const groupedNotes = notes.reduce((acc, note) => {
     if (!acc[note.classCategory]) {
       acc[note.classCategory] = [];
@@ -13,70 +28,89 @@ const Explore = () => {
     return acc;
   }, {});
 
+  // Apply chapter search filter on each group.
+  const filteredGroupedNotes = Object.entries(groupedNotes).reduce((acc, [category, notesArr]) => {
+    const filtered = notesArr.filter(note =>
+      note.chapter.toLowerCase().includes(searchChapter.toLowerCase())
+    );
+    if (filtered.length > 0) {
+      acc[category] = filtered;
+    }
+    return acc;
+  }, {});
+
+  // If a category is selected, restrict to that group only.
+  const finalGroupedNotes = selectedCategory
+    ? { [selectedCategory]: filteredGroupedNotes[selectedCategory] || [] }
+    : filteredGroupedNotes;
+
   return (
     <div className="max-w-6xl mx-auto mt-10 px-4">
       <h2 className="text-4xl font-bold mb-8 text-center text-gray-900">
         Explore Notes & Videos
       </h2>
-      {Object.keys(groupedNotes).length === 0 ? (
-        <p className="text-center text-gray-600">No notes uploaded yet.</p>
+
+      {/* Filter Section */}
+      <div className="flex flex-wrap gap-4 justify-center mb-6">
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="border border-gray-300 p-2 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">All Categories</option>
+          <option value="11th">11th</option>
+          <option value="12th">12th</option>
+          <option value="IIT JEE">IIT JEE</option>
+          <option value="NEET">NEET</option>
+        </select>
+
+        <input
+          type="text"
+          placeholder="Search by Chapter"
+          value={searchChapter}
+          onChange={(e) => setSearchChapter(e.target.value)}
+          className="border border-gray-300 p-2 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      {Object.keys(finalGroupedNotes).length === 0 ? (
+        <p className="text-center text-gray-600">No notes available.</p>
       ) : (
-        Object.keys(groupedNotes).map((category) => (
+        Object.entries(finalGroupedNotes).map(([category, notesArr]) => (
           <div key={category} className="mb-12">
             <h3 className="text-3xl font-semibold mb-6 text-gray-800 border-b-2 border-blue-600 pb-2">
               {category}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {groupedNotes[category].map((note) => (
+              {notesArr.map(note => (
                 <div
                   key={note.id}
                   className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2"
                 >
                   <h4 className="text-xl font-bold mb-3 text-gray-900">{note.chapter}</h4>
-                  <p className="text-gray-600 mb-4">{note.description}</p>
-                  <div className="space-y-3">
-                    {note.notesFile && (
-                      <div className="flex items-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6 text-blue-600 mr-2"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path d="M8 2a2 2 0 00-2 2v1H4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-2V4a2 2 0 00-2-2H8z" />
-                        </svg>
+                  <p className="text-gray-600 mb-2">{note.description}</p>
+                  <span className="text-sm font-semibold text-gray-700">
+                    Class: {note.classCategory} | Subject: {note.subject}
+                  </span>
+                  <div className="space-y-3 mt-2">
+                    {((note.notesFiles && note.notesFiles.length > 0) || note.notesFile) && (
+                      // Use an array to render download links, even if a single file is stored as notesFile
+                      (note.notesFiles ? note.notesFiles : [note.notesFile]).map((file, index) => (
                         <a
-                          href={note.notesFile.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          download={note.notesFile.name}
-                          className="text-sm text-blue-600 hover:underline"
+                          key={index}
+                          href={file.data}
+                          download={file.name}
+                          className="block text-sm text-blue-600 hover:underline"
                         >
-                          Download Notes
+                          Download {file.name}
                         </a>
-                      </div>
+                      ))
                     )}
-                    {note.videoFile && (
-                      <div className="flex flex-col">
-                        <div className="flex items-center mb-2">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6 text-blue-600 mr-2"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path d="M4 3a1 1 0 00-1 1v10a1 1 0 001 1h2v2a1 1 0 001.447.894l4-2.5A1 1 0 0012 15.5V14h2a1 1 0 001-1V4a1 1 0 00-1-1H4z" />
-                          </svg>
-                          <span className="text-sm text-gray-700">Video Preview</span>
-                        </div>
-                        <video
-                          controls
-                          className="w-full rounded-lg border border-gray-200"
-                        >
-                          <source src={note.videoFile.url} type={note.videoFile.type} />
-                          Your browser does not support the video tag.
-                        </video>
-                      </div>
+                    {note.videoFile && videoUrls[note.id] && (
+                      <video controls className="w-full rounded-lg border border-gray-200" key={note.id}>
+                        <source src={videoUrls[note.id]} type={note.videoFile.type} />
+                        Your browser does not support the video tag.
+                      </video>
                     )}
                   </div>
                 </div>
